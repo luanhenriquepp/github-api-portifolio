@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Potifólio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <h1>Sobre mim</h1>
+    <img rel="fotoDePerfil" src="assets/39426493.jpeg">
+    <div>
+        <p>Eu me chamo Luan Henrique, moro em Brasília, tenho 26 anos e atualmente trabalho como Desenvolvedor Front-end na empresa Synbus</p>
+    </div>
+    <div id="renderList"></div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        const ul = document.createElement('ul');
+        ul.setAttribute('id','projectList');
+        document.getElementById('renderList').appendChild(ul);
+
+        axios.get('https://api.github.com/users/luanhenriquepp/repos').then(response => {
+            response.data.forEach(element => {
+            const li = document.createElement('li');
+            li.setAttribute('class','item');
+
+            ul.appendChild(li);
+
+            li.innerHTML =  element.html_url;
+            });
+        })
+
+    </script>
+</body>
+</html>
