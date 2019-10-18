@@ -10,9 +10,9 @@
 <body>
     
     <h1>Sobre mim</h1>
-    <img id="imagemPeril">
-    <div>
-        <p>Eu me chamo Luan Henrique, moro em Brasília, tenho 26 anos e atualmente trabalho como Desenvolvedor Front-end na empresa Synbus</p>
+    <img id="avatar">
+    <div id="bio">
+        <p id="bio_pagraph"></p>
     </div>
     <div id="renderList"></div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -26,10 +26,18 @@
                 localStorage.setItem('user', user)
             })
         }
-        getUser();
+        getUser()
 
         let user = JSON.parse(localStorage.getItem('user'))
         let { login }  = user
+
+        const setUserInformation = () => {
+            const avatar_url = document.getElementById('avatar')
+            avatar_url.src = user.avatar_url
+
+            document.getElementById('bio_pagraph').innerHTML = user.bio
+        }
+        setUserInformation()
 
         const getUserProjects =  () => {
 
@@ -47,7 +55,7 @@
             })
         }
         getUserProjects()
-        
+
     </script>
 </body>
 </html>
