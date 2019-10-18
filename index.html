@@ -10,28 +10,44 @@
 <body>
     
     <h1>Sobre mim</h1>
-    <img rel="fotoDePerfil" src="assets/39426493.jpeg">
+    <img id="imagemPeril">
     <div>
         <p>Eu me chamo Luan Henrique, moro em Brasília, tenho 26 anos e atualmente trabalho como Desenvolvedor Front-end na empresa Synbus</p>
     </div>
     <div id="renderList"></div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        const ul = document.createElement('ul');
-        ul.setAttribute('id','projectList');
-        document.getElementById('renderList').appendChild(ul);
 
-        axios.get('https://api.github.com/users/luanhenriquepp/repos').then(response => {
+        const baseUrl = 'https://api.github.com'
+
+        const getUser = () => {
+            axios.get(`${baseUrl}/users/luanhenriquepp`).then(response => {
+                const user = JSON.stringify(response.data)
+                localStorage.setItem('user', user)
+            })
+        }
+        getUser();
+
+        let user = JSON.parse(localStorage.getItem('user'))
+        let { login }  = user
+
+        const getUserProjects =  () => {
+
+            const ul = document.createElement('ul')
+            ul.setAttribute('id','projectList')
+            document.getElementById('renderList').appendChild(ul)
+
+            axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
             response.data.forEach(element => {
-            const li = document.createElement('li');
-            li.setAttribute('class','item');
-
-            ul.appendChild(li);
-
-            li.innerHTML =  element.html_url;
-            });
-        })
-
+            const li = document.createElement('li')
+            li.setAttribute('class','item')
+                ul.appendChild(li)
+                li.innerHTML =  element.html_url
+                })
+            })
+        }
+        getUserProjects()
+        
     </script>
 </body>
 </html>
