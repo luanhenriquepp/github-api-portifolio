@@ -9,12 +9,16 @@
 </head>
 <body>
     
-    <h1>Sobre mim</h1>
+    <h1>Portifólio</h1>
     <img id="avatar">
     <div id="bio">
+        <h2>Sobre mim</h2>
         <p id="bio_pagraph"></p>
     </div>
-    <div id="renderList"></div>
+    <div id="renderList" class="row">
+    
+    </div>
+
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
 
@@ -41,16 +45,31 @@
 
         const getUserProjects =  () => {
 
-            const ul = document.createElement('ul')
-            ul.setAttribute('id','projectList')
-            document.getElementById('renderList').appendChild(ul)
+            const divElement = document.createElement('div')
+            divElement.setAttribute('class','column')
+
+            document.getElementById('renderList').appendChild(divElement)
 
             axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
             response.data.forEach(element => {
-            const li = document.createElement('li')
-            li.setAttribute('class','item')
-                ul.appendChild(li)
-                li.innerHTML =  element.html_url
+
+                const divCardElement = document.createElement('div')
+                divCardElement.setAttribute('class','card') 
+                const h1Element = document.createElement('h1')
+                h1Element.innerHTML = element.name
+                divCardElement.appendChild(h1Element)
+
+                const pElement = document.createElement('p')
+                pElement.innerHTML = element.description
+                divCardElement.appendChild(pElement)
+
+                const aElement = document.createElement('a')
+                aElement.setAttribute('href', element.html_url)
+                aElement.innerHTML = 'LINK DO PROJETO'
+                divCardElement.appendChild(aElement)
+
+                document.getElementById('content').appendChild(divCardElement)
+
                 })
             })
         }
