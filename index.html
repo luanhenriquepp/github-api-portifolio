@@ -47,8 +47,10 @@
 
             const divElement = document.createElement('div')
             divElement.setAttribute('class','column')
-
+            divElement.setAttribute('id', 'content')
+            
             document.getElementById('renderList').appendChild(divElement)
+
 
             axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
             response.data.forEach(element => {
