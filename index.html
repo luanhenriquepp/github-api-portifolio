@@ -12,7 +12,7 @@
     <h1>Portifólio</h1>
     
    <div style="display: flex;">
-    <div id="bio"style="flex: 0 0 20%">
+    <div id="bio" style="flex: 0 0 20%">
       <img id="avatar" />
       <h2>Sobre mim</h2>
       <p id="bio_pagraph"></p>
@@ -67,26 +67,26 @@
             const newElement  = element.name.replace(new RegExp(/\W+/g), ' ')
             const nameCapitalized = newElement.charAt(0).toUpperCase() + newElement.slice(1)
 
-            const divCardElement = document.createElement("div")
-            divCardElement.setAttribute("class", "card")
-            const h1Element = document.createElement("h1")
-            h1Element.innerHTML = nameCapitalized
-            divCardElement.appendChild(h1Element)
+            const divCardElement = document.createElement('div')
+            divCardElement.setAttribute('class', 'card')
+            const h2Element = document.createElement('h2')
+            h2Element.innerHTML = nameCapitalized
+            divCardElement.appendChild(h2Element)
 
-            const pElementDescription = document.createElement("p")
+            const pElementDescription = document.createElement('p')
             pElementDescription.innerHTML = element.description
             divCardElement.appendChild(pElementDescription)
 
             resultCalc.forEach(responseCalc => {
-                const divElement = document.createElement("div")
+                const divElement = document.createElement('div')
                 const language = Object.keys(responseCalc)[0]
                 divElement.innerHTML = `${language} : ${responseCalc[language].toFixed(2)}%`
                 divCardElement.appendChild(divElement)
             })
 
-            const aElement = document.createElement("a")
-            aElement.setAttribute("href", element.html_url)
-            aElement.innerHTML = "LINK DO PROJETO"
+            const aElement = document.createElement('a')
+            aElement.setAttribute('href', element.html_url)
+            aElement.innerHTML = 'LINK DO PROJETO'
             divCardElement.appendChild(aElement)
 
 
