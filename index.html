@@ -23,58 +23,79 @@
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-      const baseUrl = "https://api.github.com";
+      const baseUrl = "https://api.github.com"
 
       const getUser = () => {
         axios.get(`${baseUrl}/users/luanhenriquepp`).then(response => {
-          const user = JSON.stringify(response.data);
-          localStorage.setItem("user", user);
-        });
-      };
-      getUser();
+          const user = JSON.stringify(response.data)
+          localStorage.setItem("user", user)
+        })
+      }
+      getUser()
 
-      let user = JSON.parse(localStorage.getItem("user"));
-      let { login } = user;
+      let user = JSON.parse(localStorage.getItem("user"))
+      let { login } = user
 
       const setUserInformation = () => {
-        const avatar_url = document.getElementById("avatar");
-        avatar_url.src = user.avatar_url;
+        const avatar_url = document.getElementById("avatar")
+        avatar_url.src = user.avatar_url
 
-        document.getElementById("bio_pagraph").innerHTML = user.bio;
-      };
-      setUserInformation();
+        document.getElementById("bio_pagraph").innerHTML = user.bio
+      }
+      setUserInformation()
 
+        const calculateTechs = ({...params}) => {
+
+        const total = Object.keys(params).reduce((t, c ) => t + params[c], 0)
+
+         return Object.keys(params).map(item => {
+             const percentage  = (params[item] / total ) * 100
+             return {
+                 [item]: percentage
+             }
+         })
+        }
       const getUserProjects = () => {
       
         
-          axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
+        axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
       
-          response.data.forEach(element => {
-          
+            response.data.forEach(element => {
+            axios.get(element.languages_url).then( resp => {
+            const resultCalc = calculateTechs(resp.data)
+
             const newElement  = element.name.replace(new RegExp(/\W+/g), ' ')
             const nameCapitalized = newElement.charAt(0).toUpperCase() + newElement.slice(1)
 
-            const divCardElement = document.createElement("div");
-            divCardElement.setAttribute("class", "card");
-            const h1Element = document.createElement("h1");
-            h1Element.innerHTML = nameCapitalized;
-            divCardElement.appendChild(h1Element);
+            const divCardElement = document.createElement("div")
+            divCardElement.setAttribute("class", "card")
+            const h1Element = document.createElement("h1")
+            h1Element.innerHTML = nameCapitalized
+            divCardElement.appendChild(h1Element)
 
-            const pElementDescription = document.createElement("p");
-            pElementDescription.innerHTML = element.description;
-            divCardElement.appendChild(pElementDescription);
+            const pElementDescription = document.createElement("p")
+            pElementDescription.innerHTML = element.description
+            divCardElement.appendChild(pElementDescription)
 
-            const h3Element = document.createElement("h3");
-            h3Element.setAttribute("class", "h3-language");
-            h3Element.innerHTML = element.language;
-            divCardElement.appendChild(h3Element);
+            resultCalc.forEach(responseCalc => {
+                const divElement = document.createElement("div")
+                const language = Object.keys(responseCalc)[0]
+                divElement.innerHTML = `${language} : ${responseCalc[language].toFixed(2)}%`
+                divCardElement.appendChild(divElement)
+            })
 
-            const aElement = document.createElement("a");
-            aElement.setAttribute("href", element.html_url);
-            aElement.innerHTML = "LINK DO PROJETO";
-            divCardElement.appendChild(aElement);
+            const aElement = document.createElement("a")
+            aElement.setAttribute("href", element.html_url)
+            aElement.innerHTML = "LINK DO PROJETO"
+            divCardElement.appendChild(aElement)
+
+
+           
+            
 
             document.getElementById("renderList").appendChild(divCardElement);
+            })
+            
           });
         });
       };
