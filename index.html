@@ -1,82 +1,84 @@
 <!DOCTYPE html>
 <html lang="">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Potifólio</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
     <h1>Portifólio</h1>
-    <img id="avatar">
-    <div id="bio">
-        <h2>Sobre mim</h2>
-        <p id="bio_pagraph"></p>
-    </div>
-    <div id="renderList" class="row">
     
+   <div style="display: flex;">
+    <div id="bio"style="flex: 0 0 20%">
+      <img id="avatar" />
+      <h2>Sobre mim</h2>
+      <p id="bio_pagraph"></p>
     </div>
+    <div id="renderList" style="display: flex; flex-wrap: wrap;">
+    </div>
+   </div>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+      const baseUrl = "https://api.github.com";
 
-        const baseUrl = 'https://api.github.com'
+      const getUser = () => {
+        axios.get(`${baseUrl}/users/luanhenriquepp`).then(response => {
+          const user = JSON.stringify(response.data);
+          localStorage.setItem("user", user);
+        });
+      };
+      getUser();
 
-        const getUser = () => {
-            axios.get(`${baseUrl}/users/luanhenriquepp`).then(response => {
-                const user = JSON.stringify(response.data)
-                localStorage.setItem('user', user)
-            })
-        }
-        getUser()
+      let user = JSON.parse(localStorage.getItem("user"));
+      let { login } = user;
 
-        let user = JSON.parse(localStorage.getItem('user'))
-        let { login }  = user
+      const setUserInformation = () => {
+        const avatar_url = document.getElementById("avatar");
+        avatar_url.src = user.avatar_url;
 
-        const setUserInformation = () => {
-            const avatar_url = document.getElementById('avatar')
-            avatar_url.src = user.avatar_url
+        document.getElementById("bio_pagraph").innerHTML = user.bio;
+      };
+      setUserInformation();
 
-            document.getElementById('bio_pagraph').innerHTML = user.bio
-        }
-        setUserInformation()
+      const getUserProjects = () => {
+      
+        
+          axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
+      
+          response.data.forEach(element => {
+          
+            const newElement  = element.name.replace(new RegExp(/\W+/g), ' ')
+            const nameCapitalized = newElement.charAt(0).toUpperCase() + newElement.slice(1)
 
-        const getUserProjects =  () => {
+            const divCardElement = document.createElement("div");
+            divCardElement.setAttribute("class", "card");
+            const h1Element = document.createElement("h1");
+            h1Element.innerHTML = nameCapitalized;
+            divCardElement.appendChild(h1Element);
 
-            const divElement = document.createElement('div')
-            divElement.setAttribute('class','column')
-            divElement.setAttribute('id', 'content')
-            
-            document.getElementById('renderList').appendChild(divElement)
+            const pElementDescription = document.createElement("p");
+            pElementDescription.innerHTML = element.description;
+            divCardElement.appendChild(pElementDescription);
 
+            const h3Element = document.createElement("h3");
+            h3Element.setAttribute("class", "h3-language");
+            h3Element.innerHTML = element.language;
+            divCardElement.appendChild(h3Element);
 
-            axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
-            response.data.forEach(element => {
+            const aElement = document.createElement("a");
+            aElement.setAttribute("href", element.html_url);
+            aElement.innerHTML = "LINK DO PROJETO";
+            divCardElement.appendChild(aElement);
 
-                const divCardElement = document.createElement('div')
-                divCardElement.setAttribute('class','card') 
-                const h1Element = document.createElement('h1')
-                h1Element.innerHTML = element.name
-                divCardElement.appendChild(h1Element)
-
-                const pElement = document.createElement('p')
-                pElement.innerHTML = element.description
-                divCardElement.appendChild(pElement)
-
-                const aElement = document.createElement('a')
-                aElement.setAttribute('href', element.html_url)
-                aElement.innerHTML = 'LINK DO PROJETO'
-                divCardElement.appendChild(aElement)
-
-                document.getElementById('content').appendChild(divCardElement)
-
-                })
-            })
-        }
-        getUserProjects()
-
+            document.getElementById("renderList").appendChild(divCardElement);
+          });
+        });
+      };
+      getUserProjects();
     </script>
-</body>
+  </body>
 </html>
