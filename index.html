@@ -34,10 +34,10 @@
 
     const baseUrl = 'https://api.github.com'
 
-    const getUserProjects = login => {
+    const getUserProjects = repos_url => {
       
       document.getElementById('render-list').innerHTML = ''
-      axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
+      axios.get(repos_url).then(response => {
 
         response.data.forEach(element => {
           axios.get(element.languages_url).then(resp => {
@@ -89,7 +89,7 @@
       avatar_url.src = user.avatar_url
       document.getElementById('about').innerHTML = 'Sobre mim'
       document.getElementById('bio_pagraph').innerHTML = user.bio
-      getUserProjects(user.login)
+      getUserProjects(user.repos_url)
     }
 
     const getUser = login => {
