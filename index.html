@@ -1,70 +1,48 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Potifólio</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
 
-  <body>
-    <h1>Portifólio</h1>
-    
-   <div style="display: flex;">
-    <div id="bio" style="flex: 0 0 20%">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Potifólio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <h1>Portifólio</h1>
+  <div>
+    <form id="form">
+      <input type="text" required>
+      <button type="submit">
+        Buscar usuário
+      </button>
+    </form>
+  </div>
+  <div class="container">
+    <div id="bio" class="bio">
       <img id="avatar" />
-      <h2>Sobre mim</h2>
+      <h2 id="about"></h2>
       <p id="bio_pagraph"></p>
     </div>
-    <div id="renderList" style="display: flex; flex-wrap: wrap;">
+    <div id="render-list" class="render-list">
     </div>
-   </div>
+  </div>
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
-      const baseUrl = "https://api.github.com"
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
 
-      const getUser = () => {
-        axios.get(`${baseUrl}/users/luanhenriquepp`).then(response => {
-          const user = JSON.stringify(response.data)
-          localStorage.setItem("user", user)
-        })
-      }
-      getUser()
+    const baseUrl = 'https://api.github.com'
 
-      let user = JSON.parse(localStorage.getItem("user"))
-      let { login } = user
+    const getUserProjects = login => {
+      document.getElementById('render-list').innerHTML = ''
+      axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
 
-      const setUserInformation = () => {
-        const avatar_url = document.getElementById("avatar")
-        avatar_url.src = user.avatar_url
+        response.data.forEach(element => {
+          axios.get(element.languages_url).then(resp => {
 
-        document.getElementById("bio_pagraph").innerHTML = user.bio
-      }
-      setUserInformation()
-
-        const calculateTechs = ({...params}) => {
-
-        const total = Object.keys(params).reduce((t, c ) => t + params[c], 0)
-
-         return Object.keys(params).map(item => {
-             const percentage  = (params[item] / total ) * 100
-             return {
-                 [item]: percentage
-             }
-         })
-        }
-      const getUserProjects = () => {
-      
-        
-        axios.get(`${baseUrl}/users/${login}/repos`).then(response => {
-      
-            response.data.forEach(element => {
-            axios.get(element.languages_url).then( resp => {
             const resultCalc = calculateTechs(resp.data)
-
-            const newElement  = element.name.replace(new RegExp(/\W+/g), ' ')
+            const newElement = element.name.replace(new RegExp(/\W+/g), ' ')
             const nameCapitalized = newElement.charAt(0).toUpperCase() + newElement.slice(1)
 
             const divCardElement = document.createElement('div')
@@ -78,10 +56,10 @@
             divCardElement.appendChild(pElementDescription)
 
             resultCalc.forEach(responseCalc => {
-                const divElement = document.createElement('div')
-                const language = Object.keys(responseCalc)[0]
-                divElement.innerHTML = `${language} : ${responseCalc[language].toFixed(2)}%`
-                divCardElement.appendChild(divElement)
+              const divElement = document.createElement('div')
+              const language = Object.keys(responseCalc)[0]
+              divElement.innerHTML = `${language} : ${responseCalc[language].toFixed(2)}%`
+              divCardElement.appendChild(divElement)
             })
 
             const aElement = document.createElement('a')
@@ -89,17 +67,43 @@
             aElement.innerHTML = 'LINK DO PROJETO'
             divCardElement.appendChild(aElement)
 
+            document.getElementById('render-list').appendChild(divCardElement);
+          })
+        })
+      })
+    }
 
-           
-            
+    const calculateTechs = ({ ...params }) => {
+      const total = Object.keys(params).reduce((t, c) => t + params[c], 0)
+      return Object.keys(params).map(item => {
+        const percentage = (params[item] / total) * 100
+        return {
+          [item]: percentage
+        }
+      })
+    }
 
-            document.getElementById("renderList").appendChild(divCardElement);
-            })
-            
-          });
-        });
-      };
-      getUserProjects();
-    </script>
-  </body>
+    const setUserInformation = user => {
+      const avatar_url = document.getElementById('avatar')
+      avatar_url.src = user.avatar_url
+      document.getElementById('about').innerHTML = 'Sobre mim'
+      document.getElementById('bio_pagraph').innerHTML = user.bio
+      getUserProjects(user.login)
+    }
+
+    const getUser = login => {
+      axios.get(`${baseUrl}/users/${login}`).then(response => {
+        setUserInformation(response.data)
+      })
+    }
+
+    document.querySelector('#form').addEventListener('submit', event => {
+      console.log(event)
+      const user = event.target[0].value
+      event.preventDefault();
+      getUser(user)
+    })
+
+  </script>
+</body>
 </html>

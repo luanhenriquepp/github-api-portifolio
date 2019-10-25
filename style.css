@@ -27,8 +27,8 @@ h2 {
   }
   
 img {
-    width: 300px;
-    height: 300px;
+    width: auto;
+    height: auto;
 }
 
 .h3-language {
@@ -39,3 +39,15 @@ img {
 div {
     margin-bottom: 8px;
 }
+
+.render-list {
+  display: flex; 
+  flex-wrap: wrap;
+}
+ .bio {
+  flex: 0 0 20%
+ }
+ 
+ .container {
+  display: flex;
+ }
