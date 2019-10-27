@@ -43,6 +43,7 @@
           axios.get(element.languages_url).then(resp => {
 
             const resultCalc = calculateTechs(resp.data)
+          
             const newElement = element.name.replace(new RegExp(/\W+/g), ' ')
             const nameCapitalized = newElement.charAt(0).toUpperCase() + newElement.slice(1)
 
@@ -76,7 +77,7 @@
     }
 
     const calculateTechs = ({ ...params }) => {
-      const total = Object.keys(params).reduce((t, c) => t + params[c], 0)
+      const total = Object.values(params).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
       return Object.keys(params).map(item => {
         const percentage = (params[item] / total) * 100
         return {
