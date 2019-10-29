@@ -30,6 +30,8 @@
   </div>
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+
   <script>
 
     const baseUrl = 'https://api.github.com'
@@ -43,7 +45,8 @@
           axios.get(element.languages_url).then(resp => {
 
             const resultCalc = calculateTechs(resp.data)
-          
+            const canvas = createChart(resp.data, resultCalc);
+
             const newElement = element.name.replace(new RegExp(/\W+/g), ' ')
             const nameCapitalized = newElement.charAt(0).toUpperCase() + newElement.slice(1)
 
@@ -57,18 +60,12 @@
             pElementDescription.innerHTML = element.description
             divCardElement.appendChild(pElementDescription)
 
-            resultCalc.forEach(responseCalc => {
-              const divElement = document.createElement('div')
-              const language = Object.keys(responseCalc)[0]
-              divElement.innerHTML = `${language} : ${responseCalc[language].toFixed(2)}%`
-              divCardElement.appendChild(divElement)
-            })
-
             const aElement = document.createElement('a')
             aElement.setAttribute('href', element.html_url)
             aElement.target = '_blank'
             aElement.innerHTML = 'LINK DO PROJETO'
             divCardElement.appendChild(aElement)
+            divCardElement.appendChild(canvas)
 
             document.getElementById('render-list').appendChild(divCardElement);
           })
@@ -76,14 +73,35 @@
       })
     }
 
-    const calculateTechs = ({ ...params }) => {
-      const total = Object.values(params).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const calculateTechs = params => {
+      const total = Object.values(params).reduce((accumulator, currentValue) => accumulator + currentValue, 0)
       return Object.keys(params).map(item => {
         const percentage = (params[item] / total) * 100
-        return {
-          [item]: percentage
-        }
+        return percentage.toFixed(2)
       })
+    }
+
+    const createChart  = (params, calculatedvalues) => {
+      const elementCanvas = document.createElement('canvas')
+      const oilData = {
+        labels: Object.keys(params),
+        datasets: [
+          {
+            data: calculatedvalues,
+            backgroundColor: [
+              "#FF6384",
+              "#63FF84",
+              "#84FF63",
+              "#8463FF",
+              "#6384FF"
+            ]
+          }]
+      }
+      new Chart(elementCanvas, {
+        type: 'pie',
+        data: oilData
+      });
+      return elementCanvas;
     }
 
     const setUserInformation = user => {
