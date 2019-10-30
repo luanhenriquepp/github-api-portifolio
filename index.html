@@ -92,13 +92,12 @@
           {
             data: calculatedvalues,
             backgroundColor: [
-              "#FF6384",
-              "#63FF84",
-              "#84FF63",
-              "#8463FF",
-              "#6384FF"
+              '#ffce56',
+              '#36a2eb',
+              '#cc65fe',
+              '#ff6384'
             ]
-          }]
+        }]
       }
       new Chart(elementCanvas, {
         type: 'pie',
@@ -107,9 +106,8 @@
           tooltips: {
             callbacks: {
             label: function(tooltipItem, data) {
-                console.log(data)
-                  return  data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%"
-              }
+                return  data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%"
+              },
             }
           },
           legend: {
