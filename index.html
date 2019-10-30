@@ -60,12 +60,14 @@
             pElementDescription.innerHTML = element.description
             divCardElement.appendChild(pElementDescription)
 
+            divCardElement.appendChild(canvas)
+
             const aElement = document.createElement('a')
             aElement.setAttribute('href', element.html_url)
             aElement.target = '_blank'
             aElement.innerHTML = 'LINK DO PROJETO'
             divCardElement.appendChild(aElement)
-            divCardElement.appendChild(canvas)
+           
 
             document.getElementById('render-list').appendChild(divCardElement);
           })
@@ -83,6 +85,7 @@
 
     const createChart  = (params, calculatedvalues) => {
       const elementCanvas = document.createElement('canvas')
+      elementCanvas.setAttribute('class', 'languages')
       const oilData = {
         labels: Object.keys(params),
         datasets: [
@@ -99,7 +102,24 @@
       }
       new Chart(elementCanvas, {
         type: 'pie',
-        data: oilData
+        data: oilData,
+        options: {
+          tooltips: {
+            callbacks: {
+            label: function(tooltipItem, data) {
+                console.log(data)
+                  return  data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%"
+              }
+            }
+          },
+          legend: {
+              position: 'left',
+              labels: {
+                  boxWidth: 15,
+                  padding: 20
+              }
+            }
+          }
       });
       return elementCanvas;
     }
