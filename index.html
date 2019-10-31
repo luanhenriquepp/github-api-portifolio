@@ -12,18 +12,21 @@
 <body>
   <h1>Portifólio</h1>
   <div>
-    <form id="form">
-      <input type="text" required placeholder="LOGIN GITHUB">
-      <button type="submit">
-        Buscar usuário
-      </button>
+      <form id="form">
+        <div class="form-row align-items-center">
+            <div class="form-group mx-xl-3">
+                <input type="text" class="form-control" placeholder="Usuário do GitHub">
+              </div>
+          <div class="col-auto">
+          <button type="submit" class="btn btn-primary mb-2">Buscar Projetos</button>
+          </div>
     </form>
   </div>
-  <div class="container">
+  <div class="card-group">
     <div id="bio" class="bio">
       <img id="avatar" />
-      <h2 id="about"></h2>
-      <p id="bio_pagraph"></p>
+      <h2 id="about" class="card-title"></h2>
+      <p id="bio_pagraph" class="card-text"></p>
     </div>
     <div id="render-list" class="render-list">
     </div>
@@ -31,6 +34,9 @@
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+  crossorigin="anonymous">
 
   <script>
 
@@ -62,13 +68,17 @@
 
             divCardElement.appendChild(canvas)
 
+
+
+            const divCardBodyElement = document.createElement('div')
+            divCardBodyElement.setAttribute('class', 'card-body')
             const aElement = document.createElement('a')
             aElement.setAttribute('href', element.html_url)
+            aElement.setAttribute('class', 'btn btn-primary btn-m')
             aElement.target = '_blank'
             aElement.innerHTML = 'LINK DO PROJETO'
-            divCardElement.appendChild(aElement)
-           
-
+            divCardBodyElement.appendChild(aElement)
+            divCardElement.appendChild(divCardBodyElement)
             document.getElementById('render-list').appendChild(divCardElement);
           })
         })
