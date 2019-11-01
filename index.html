@@ -10,41 +10,46 @@
 </head>
 
 <body>
-  <h1>Portifólio</h1>
-  <div>
+  
+  <div class="container-fluid">
+    <h1>Portifólio</h1>
+    <div>
       <form id="form">
         <div class="form-row align-items-center">
-            <div class="form-group mx-xl-3">
-                <input type="text" class="form-control" placeholder="Usuário do GitHub">
-              </div>
-          <div class="col-auto">
-          <button type="submit" class="btn btn-primary mb-2">Buscar Projetos</button>
+          <div class="form-group mx-xl-3">
+            <input type="text" class="form-control" placeholder="Usuário do GitHub">
           </div>
-    </form>
-  </div>
-  <div class="card-group">
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Buscar Projetos</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
     <div id="bio" class="bio">
       <img id="avatar" />
       <h2 id="about" class="card-title"></h2>
       <p id="bio_pagraph" class="card-text"></p>
     </div>
-    <div id="render-list" class="render-list">
+  
+    <div class="card-deck" id="render-list">
+
     </div>
   </div>
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
-  crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <script>
 
     const baseUrl = 'https://api.github.com'
 
     const getUserProjects = repos_url => {
-      
+
       document.getElementById('render-list').innerHTML = ''
+
       axios.get(repos_url).then(response => {
 
         response.data.forEach(element => {
@@ -56,30 +61,40 @@
             const newElement = element.name.replace(new RegExp(/\W+/g), ' ')
             const nameCapitalized = newElement.charAt(0).toUpperCase() + newElement.slice(1)
 
+
+
             const divCardElement = document.createElement('div')
             divCardElement.setAttribute('class', 'card')
-            const h2Element = document.createElement('h2')
-            h2Element.innerHTML = nameCapitalized
-            divCardElement.appendChild(h2Element)
 
-            const pElementDescription = document.createElement('p')
-            pElementDescription.innerHTML = element.description
-            divCardElement.appendChild(pElementDescription)
+            const divColElement = document.createElement('div')
+            divColElement.setAttribute('class', 'col-sm-3')
 
             divCardElement.appendChild(canvas)
 
-
-
             const divCardBodyElement = document.createElement('div')
-            divCardBodyElement.setAttribute('class', 'card-body')
+            divCardBodyElement.setAttribute('class', 'card-block')
+
+            const h5Element = document.createElement('h5')
+            h5Element.setAttribute('class', 'card-title')
+            h5Element.innerHTML = nameCapitalized
+            divCardBodyElement.appendChild(h5Element)
+
+            const pElementDescription = document.createElement('p')
+            pElementDescription.setAttribute('class', 'card-text')
+            pElementDescription.innerHTML = element.description
+            divCardBodyElement.appendChild(pElementDescription)
+
             const aElement = document.createElement('a')
             aElement.setAttribute('href', element.html_url)
-            aElement.setAttribute('class', 'btn btn-primary btn-m')
+            aElement.setAttribute('class', 'btn btn-primary')
             aElement.target = '_blank'
             aElement.innerHTML = 'LINK DO PROJETO'
             divCardBodyElement.appendChild(aElement)
             divCardElement.appendChild(divCardBodyElement)
-            document.getElementById('render-list').appendChild(divCardElement);
+
+            divColElement.appendChild(divCardElement)
+
+            document.getElementById('render-list').appendChild(divColElement);
           })
         })
       })
@@ -93,7 +108,7 @@
       })
     }
 
-    const createChart  = (params, calculatedvalues) => {
+    const createChart = (params, calculatedvalues) => {
       const elementCanvas = document.createElement('canvas')
       elementCanvas.setAttribute('class', 'languages')
       const oilData = {
@@ -107,27 +122,27 @@
               '#cc65fe',
               '#ff6384'
             ]
-        }]
+          }]
       }
       new Chart(elementCanvas, {
-        type: 'pie',
+        type: 'doughnut',
         data: oilData,
         options: {
           tooltips: {
             callbacks: {
-            label: function(tooltipItem, data) {
-                return  data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%"
+              label: function (tooltipItem, data) {
+                return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%"
               },
             }
           },
           legend: {
-              position: 'left',
-              labels: {
-                  boxWidth: 15,
-                  padding: 20
-              }
+            position: 'left',
+            labels: {
+              boxWidth: 15,
+              padding: 20
             }
           }
+        }
       });
       return elementCanvas;
     }
