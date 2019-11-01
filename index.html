@@ -31,7 +31,7 @@
       <h2 id="about" class="card-title"></h2>
       <p id="bio_pagraph" class="card-text"></p>
     </div>
-  
+
     <div class="card-deck" id="render-list">
 
     </div>
@@ -43,7 +43,7 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <script>
-
+  
     const baseUrl = 'https://api.github.com'
 
     const getUserProjects = repos_url => {
@@ -74,7 +74,7 @@
             const divCardBodyElement = document.createElement('div')
             divCardBodyElement.setAttribute('class', 'card-block')
 
-            const h5Element = document.createElement('h5')
+            const h5Element = document.createElement('h4')
             h5Element.setAttribute('class', 'card-title')
             h5Element.innerHTML = nameCapitalized
             divCardBodyElement.appendChild(h5Element)
@@ -128,6 +128,7 @@
         type: 'doughnut',
         data: oilData,
         options: {
+          responsive: true,
           tooltips: {
             callbacks: {
               label: function (tooltipItem, data) {

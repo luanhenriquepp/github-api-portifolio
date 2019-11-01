@@ -1,0 +1,13 @@
+p {
+    padding: 10px;
+}
+ h4 {
+     padding: 10px;
+     display: inline-block;
+ }
+ #card-block {
+     margin-bottom: 10px;
+ }
+ .chart-container {
+    display: block;
+ }
