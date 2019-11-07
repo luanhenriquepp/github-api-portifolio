@@ -1,9 +1,18 @@
 p {
     padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    resize: horizontal;
 }
  h4 {
      padding: 10px;
      display: inline-block;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     margin: 0;
  }
  #card-block {
      margin-bottom: 10px;

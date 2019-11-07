@@ -128,7 +128,6 @@
         type: 'doughnut',
         data: oilData,
         options: {
-          responsive: true,
           tooltips: {
             callbacks: {
               label: function (tooltipItem, data) {
@@ -138,9 +137,10 @@
           },
           legend: {
             position: 'left',
+            display: true,
             labels: {
-              boxWidth: 15,
-              padding: 20
+              boxWidth: 10,
+              padding: 3
             }
           }
         }
