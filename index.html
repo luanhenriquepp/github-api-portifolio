@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  
+
   <div class="container-fluid">
     <h1>Portifólio</h1>
     <div>
@@ -43,7 +43,7 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <script>
-  
+
     const baseUrl = 'https://api.github.com'
 
     const getUserProjects = repos_url => {
@@ -60,8 +60,6 @@
 
             const newElement = element.name.replace(new RegExp(/\W+/g), ' ')
             const nameCapitalized = newElement.charAt(0).toUpperCase() + newElement.slice(1)
-
-
 
             const divCardElement = document.createElement('div')
             divCardElement.setAttribute('class', 'card')
